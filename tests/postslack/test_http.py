@@ -4,7 +4,7 @@ from unittest.mock import MagicMock, patch
 from postslack import http as h
 
 
-class BuildHeaderDictTestCase(TestCase):
+class BuildHeaderAsDictTestCase(TestCase):
     """TestCase for HTTP Request headers for slack api"""
 
     @patch("postslack.http.os.environ")
@@ -17,7 +17,7 @@ class BuildHeaderDictTestCase(TestCase):
             "Content-type": "application/json",
         }
 
-        actual = h._build_header()
+        actual = h._build_header_as_dict()
 
         os_environ.get.assert_called_once_with("SLACK_BOT_USER_TOKEN")
         self.assertEqual(actual, expected)
@@ -29,7 +29,7 @@ class BuildHeaderDictTestCase(TestCase):
         os_environ.get.return_value = None
 
         with self.assertRaises(RuntimeError) as cm:
-            h._build_header()
+            h._build_header_as_dict()
 
         os_environ.get.assert_called_once_with("SLACK_BOT_USER_TOKEN")
         self.assertEqual(
@@ -37,7 +37,7 @@ class BuildHeaderDictTestCase(TestCase):
         )
 
 
-class BuildBodyBytesDataTestCase(TestCase):
+class BuildBodyAsBytesTestCase(TestCase):
     """TestCase for HTTP Request body for slack api as bytes"""
 
     @patch("postslack.http.json.dumps")
@@ -46,7 +46,7 @@ class BuildBodyBytesDataTestCase(TestCase):
         data_dict = {"channel": channel, "text": message}
         data_str = json_dumps.return_value
 
-        actual = h._build_body_bytes_data(channel, message)
+        actual = h._build_body_as_bytes(channel, message)
 
         json_dumps.assert_called_once_with(data_dict)
         data_str.encode.assert_called_once_with()

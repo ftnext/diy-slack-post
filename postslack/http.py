@@ -2,7 +2,7 @@ import json
 import os
 
 
-def _build_header():
+def _build_header_as_dict():
     """return HTTP request header as dict
 
     token to call API is specified
@@ -17,7 +17,7 @@ def _build_header():
     }
 
 
-def _build_body_bytes_data(channel, message):
+def _build_body_as_bytes(channel, message):
     """return HTTP request body as bytes, utf-8 encoded"""
     data_dict = {"channel": channel, "text": message}
     data_str = json.dumps(data_dict)
