@@ -4,8 +4,41 @@ from unittest.mock import MagicMock, patch
 from postslack import http as h
 
 
+class BuildHeaderDictTestCase(TestCase):
+    """TestCase for HTTP Request headers for slack api"""
+
+    @patch("postslack.http.os.environ")
+    def test_should_return_header_when_environment_variable_set(
+        self, os_environ
+    ):
+        token = os_environ.get.return_value
+        expected = {
+            "Authorization": f"Bearer {token}",
+            "Content-type": "application/json",
+        }
+
+        actual = h._build_header()
+
+        os_environ.get.assert_called_once_with("SLACK_BOT_USER_TOKEN")
+        self.assertEqual(actual, expected)
+
+    @patch("postslack.http.os.environ")
+    def test_should_raise_error_when_environment_variable_not_set(
+        self, os_environ
+    ):
+        os_environ.get.return_value = None
+
+        with self.assertRaises(RuntimeError) as cm:
+            h._build_header()
+
+        os_environ.get.assert_called_once_with("SLACK_BOT_USER_TOKEN")
+        self.assertEqual(
+            str(cm.exception), "環境変数 SLACK_BOT_USER_TOKEN を指定してください"
+        )
+
+
 class BuildBodyBytesDataTestCase(TestCase):
-    """TestCase for postslack.http._build_body_bytes_data"""
+    """TestCase for HTTP Request body for slack api as bytes"""
 
     @patch("postslack.http.json.dumps")
     def test_should_return_bytes_data(self, json_dumps):
