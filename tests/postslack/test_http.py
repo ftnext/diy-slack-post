@@ -4,7 +4,7 @@ from unittest.mock import MagicMock, patch
 from postslack import http as h
 
 
-class BuildBodyTestCase(TestCase):
+class BuildBodyBytesDataTestCase(TestCase):
     """TestCase for postslack.http._build_body_bytes_data"""
 
     @patch("postslack.http.json.dumps")

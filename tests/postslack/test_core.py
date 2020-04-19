@@ -8,7 +8,7 @@ class PostSlackTestCase(TestCase):
     """TestCase for postslack.core.post_slack"""
 
     @patch("postslack.http._request_to_api")
-    @patch("postslack.http._build_body")
+    @patch("postslack.http._build_body_bytes_data")
     @patch("postslack.http._build_header")
     def test_should_send_message(
         self, build_header, build_body, request_to_api
