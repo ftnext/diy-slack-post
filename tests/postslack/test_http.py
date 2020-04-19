@@ -51,3 +51,23 @@ class BuildBodyAsBytesTestCase(TestCase):
         json_dumps.assert_called_once_with(data_dict)
         data_str.encode.assert_called_once_with()
         self.assertEqual(actual, data_str.encode.return_value)
+
+
+class RequestToApiTestCase(TestCase):
+    """TestCase for HTTP request to slack API"""
+
+    @patch("postslack.http.urlopen")
+    @patch("postslack.http.Request")
+    def test_should_call_api(self, factory_request, urlopen):
+        header, body = MagicMock(spec=dict), MagicMock(spec=bytes)
+        request = factory_request.return_value
+
+        h._request_to_api(header, body)
+
+        factory_request.assert_called_once_with(
+            "https://slack.com/api/chat.postMessage",
+            data=body,
+            method="POST",
+            headers=header,
+        )
+        urlopen.assert_called_once_with(request)

@@ -1,5 +1,6 @@
 import json
 import os
+from urllib.request import Request, urlopen
 
 
 def _build_header_as_dict():
@@ -25,4 +26,6 @@ def _build_body_as_bytes(channel, message):
 
 
 def _request_to_api(header, body):
-    raise NotImplementedError
+    uri = "https://slack.com/api/chat.postMessage"
+    request = Request(uri, data=body, headers=header, method="POST")
+    urlopen(request)
